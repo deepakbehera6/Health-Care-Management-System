@@ -1,0 +1,81 @@
+<%-include("../headerFooter/header")%>
+<h2>Doctor Dashboard</h2>
+<div class="card">
+    <h3>Dr. <%= user.name%></h3>
+    <p style="color: #666;margin-top: 5px;">Email:<%= user.email%></p>
+</div>
+
+<div class="card">
+    <h3>Assigned Patient Appointments</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Department</th>
+                <th>Date & Time</th>
+                <th>Symptoms</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(appointments.length===0) {%>
+                <tr>
+                    <td colspan="6" style="text-align: center;">No patient appointments assigned</td>
+                </tr>
+                <%} else {%>
+                    <% for(app of appointments){%>
+                        <tr>
+                            <td><%= app.patient? app.patient.name:"N/A"%></td>
+                            <td><%= app.department? app.department.name:"N/A"%></td>
+                            <td><%= new Date(app.appointmentDate).toLocaleString()%></td>
+                            <td><%= app.notes ||"None"%></td>
+                            <td><strong><%= app.status%></strong></td>
+                            <td>
+                                <form action="/doctor/dashboard/status/<%= app._id%>" method="post" style="display: inline;">
+                                    <select name="status" onchange="this.form.submit()" style="padding: 0.3rem;">
+                                        <option value="Pending" <%= app.status=== "Pending"? 'selected' : '' %>>Pending</option>
+                                        <option value="Confirmed" <%= app.status=== "Confirmed"? 'selected' : '' %>>Confirmed</option>
+                                        <option value="Cancelled" <%= app.status==="Cancelled"?"selected" : "" %>>Cancelled</option>
+                                        <option value="Completed" <%= app.status==="Completed"?"selected" : "" %>>Completed</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        <%}%>
+                    <%}%>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3>Add Patient Medical Report & Prescription</h3>
+    <form action="/doctor/medical-records/add" method="post" style="margin-top: 1rem;">
+        <div class="form-group">
+            <label>Select Patient</label>
+            <select name="patientId" required>
+                <option value="">-- Choose Patient--</option>
+                <% for(app of appointments){%>
+                    <%if (app.patient){%>
+                        <option value="<%= app.patient._id %>"><%= app.patient.name %>(<%= app.patient.email %>)</option>
+                        <%}%>
+                    <%}%>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Diagnosis</label>
+            <input type="text" name="diagnosis" placeholder="e.g Acute Bronchitis" required>
+        </div>
+        <div class="form-group">
+            <label>Prescription & Dosages</label>
+            <textarea name="prescription" rows="3 " placeholder="e.g Paracetamol 650MG-1 tablet every 12 hours " required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Additional Notes</label>
+            <textarea name="notes" rows="2" placeholder="e.g follow up in 2 weeks"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Save Medical Record</button>
+    </form>
+</div>
+
+<%-include("../headerFooter/footer")%>

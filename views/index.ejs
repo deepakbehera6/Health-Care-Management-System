@@ -1,0 +1,115 @@
+<%- include("headerFooter/header")%>
+<section class="hero-section">
+    <div class="hero-content">
+        <span class="hero-badge">Modern HealthCare Management</span>
+        <h1 class="hero-title">Intelligent Care & Seamless Hospital Management</h1>
+        <p class="hero-desc">
+            Empowering patients and medical professionals with streamlined appointment scheduling,department management, and integrated medical record tracking.
+        </p>
+        <div class="hero-action">
+            <% if ( user){%>
+                <a href="/appointments/book" class="btn btn-primary btn-lg">Book an Appointment</a>
+                <% if (user.role==="Admin"){%>
+                    <a href="/admin/dashboard" class="btn btn-outline btn-lg">Admin Dashboard</a>
+                    <%} else if(user.role==="Patient") {%>
+                        <a href="/patient/dashboard" class="btn btn-outline btn-lg">Patient Dashboard</a>
+                        <%} else{%>
+                            <a href="/doctor/dashboard" class="btn btn-outline btn-lg">Doctor Dashboard</a>
+                            <%}%>
+                <%} else {%>
+                    <a href="/auth/register" class="btn btn-primary btn-lg">Create Patient Account</a>
+                    <a href="/auth/login" class="btn btn-outline btn-lg">Portal Login</a>
+                    <%}%>
+        </div>
+    </div>
+</section>
+
+<section class="stats-strip">
+    <div class="stat-box">
+        <h3>24/7</h3>
+        <p>System Availability</p>
+    </div>
+    <div class="stat-box">
+        <h3>100%</h3>
+        <p>Digital Records</p>
+    </div>
+    <div class="stat-box">
+        <h3><%= doctorCount%>+</h3>
+        <p>Specialist Doctrs</p>
+    </div>
+    <div class="stat-box">
+        <h3>Multi-Role</h3>
+        <p>Admin, Doctor & Patient</p>
+    </div>
+</section>
+
+<section class="service-section">
+    <div class="section-header">
+        <h2>Hospital Management Capabilities</h2>
+        <p>A unified architecture designed for clinical wirkflow and patient ease</p>
+    </div>
+
+    <div class="service-grid">
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <h3>Online Appointments</h3>
+            <p>Patient can Pick preferred doctor, department, and custom time slot with instant status updates.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fa-solid fa-hospital"></i>
+            </div>
+            <h3>Department Directory</h3>
+            <p>Browse medical departmrnts,head phusicians ,and specilised clinical teams in real-time. </p>
+        </div>
+    
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fa-solid fa-folder-plus"></i>
+            </div>
+            <h3>Medical Profile</h3>
+            <p>Upload profile picture, track consultations, and maintain enctypted identity controls.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fa-solid fa-square-poll-vertical"></i>
+            </div>
+            <h3>Admin & Doctor Portals</h3>
+            <p>Dedicated analysis dashboards for managing hospital personnel, schedules, and patient intake.</p>
+        </div>
+    </div>
+</section>
+
+<% if(department && department.length > 0){%>
+    <section class="departments-preview">
+        <div class="section-header">
+            <h2>Clinical Departments</h2>
+            <p>Specialized divisions equiped for modern diagnositics and care</p>
+        </div>
+        <div class="dept-card-grid">
+            <% for(dept of department ){%>
+                <div class="dept-card">
+                    <h4><%= dept.name %></h4>
+                    <p><%= dept.description ? dept.description.substring(0,100) +'...' :'Specialized patient care and medical consultations.'%></p>
+                    <a href="/departments" class="link-arrow">Explore Department &rarr;</a>
+                </div>
+                <%}%>
+        </div>
+    </section>
+    <%}%>
+
+    <section class="cta-banner">
+        <div class="cta-content">
+            <h2>Ready to schedule your next consultation?</h2>
+            <p> Join our secure healthcare portal to connect with verified specialists today</p>
+            <div class="cta-btn-wrapper">
+                <a href="/auth/register" class="btn btn-light btn-lg">Get Started Now</a>
+            </div>
+        </div>
+    </section>
+
+<%- include("headerFooter/footer")%>

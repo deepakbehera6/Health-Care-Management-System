@@ -1,0 +1,48 @@
+<%- include("../headerFooter/header")%>
+<h2>All Scheduled Appointments</h2>
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;margin-bottom: 1rem;">
+        <h3>Appointment List</h3>
+
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Department</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(appointments.length===0){%>
+                <tr>
+                    <td colspan="6" style="text-align: center;">No appointment Found</td>
+                </tr>
+                <%} else {%>
+                    <% for(app of appointments){%>
+                        <tr>
+                            <td><%= app.patient? app.patient.name: "N/A"%></td>
+                            <td>Dr.<%= app.doctor?app.doctor.name : "N/A"%></td>
+                            <td><%= app.department?app.department.name : "N/A"%></td>
+                            <td><%= new Date(app.appointmentDate).toLocaleString()%></td>
+                            <td><strong><%= app.status%></strong></td>
+                            <td>
+                                <form action="/appointments/status/<%= app._id%>" method="post" style="display: inline;">
+                                    <select name="status" onchange="this.form.submit()" style="padding: 0.3rem;">
+                                        <option value="Pending" <%= app.status=== "Pending"? 'selected' : '' %>>Pending</option>
+                                        <option value="Confirmed" <%= app.status=== "Confirmed"? 'selected' : '' %>>Confirmed</option>
+                                        <option value="Cancelled" <%= app.status==="Cancelled"?"selected" : "" %>>Cancelled</option>
+                                        <option value="Completed" <%= app.status==="Completed"?"selected" : "" %>>Completed</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        <%}%>
+                    <%}%>
+        </tbody>
+    </table>
+</div>
+<%- include("../headerFooter/footer")%>

@@ -1,0 +1,83 @@
+<%-include("../headerFooter/header")%>
+<div style="display: flex;justify-content: space-between;align-items: center;margin-bottom: 1.5rem;">
+    <h2>Patient Dashboard</h2>
+    <a href="/appointments/book" class="btn btn-success">+ Book New Appointment</a>
+</div>
+<div class="card">
+    <H3>Welcome,<%= user.name %></H3>
+    <p style="color: #666;margin-top: 5px;">Email:<%= user.email%>| Role<%=user.role%></p>
+</div>
+
+<div class="card">
+    <h3>My appointments</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Department</th>
+                <th>Date & Time</th>
+                <th>Notes</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+             <% if(appointments.length===0){%>
+                <tr>
+                    <td colspan="6" style="text-align: center;">No appointment Found</td>
+                </tr>
+                <%} else {%>
+                    <% for(app of appointments){%>
+                        <tr>
+                            <td>Dr.<%= app.doctor?app.doctor.name : "N/A"%></td>
+                            <td><%= app.department?app.department.name : "N/A"%></td>
+                            <td><%= new Date(app.appointmentDate).toLocaleString()%></td>
+                            <td><%= app.notes||"None"%></td>
+                            <td>
+                                <span class="btn <% if(app.status==='Confirmed'){%>
+                                    btn-success
+                                    <%} else if(app.status==='Cancelled'){%>
+                                        btn.danger<%}else{%>
+                                        btn-warning<%}%>" style="padding: 0.2rem 0.6rem; font-size: 0.85rem;"><%=app.status%></span>
+                            </td>
+                        </tr>
+                        <%}%>
+                        <%}%>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3>My Medical Records & Prescription</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Attending Doctor</th>
+                <th>Diagnosis</th>
+                <th>Prescription</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(records.length===0) { %>
+                <tr>
+                    <td colspan="5" style="text-align: center;">
+                        No medical Record Found
+                    </td>
+                </tr>
+
+                <%} else {%>
+                    <% for(rec of records) {%>
+                        <tr>
+                            <td><%= new Date(rec.createdAt).toLocaleDateString()%></td>
+                            <td>Dr.<%= rec.doctor ? rec.doctor.name :"N/A" %></td>
+                            <td><strong><%= rec.diagnosis %></strong></td>
+                            <td><%= rec.prescription %></td>
+                            <td><%= rec.notes||"None" %></td>
+                        </tr>
+                        <%}%>
+                    <%}%>
+        </tbody>
+    </table>
+</div>
+<%-include("../headerFooter/footer")%>
